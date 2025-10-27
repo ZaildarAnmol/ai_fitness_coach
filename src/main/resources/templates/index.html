@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>AI Fitness Coach</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        .container { max-width: 600px; margin: auto; }
+        h1 { color: #2c3e50; }
+        .message { color: green; }
+        .error { color: red; }
+        .result { margin-top: 1em; padding: 1em; border: 1px solid #ccc; }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>AI Fitness Coach</h1>
+    <!-- Display success or error message -->
+    <div th:if="${message}" th:classappend="${#strings.contains(message,
+'Error')}? 'error' : 'message'">
+        <p th:text="${message}"></p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" th:action="@{/}">
+        <table>
+            <tr>
+                <td>Select an audio file (MP3/WAV):</td>
+                <td><input type="file" name="audioFile" accept=".mp3, .wav"
+                           required/></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:right;">
+                    <button type="submit">Upload & Analyze</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div class="result" th:if="${session != null}">
+        <h3>Analysis Result (at <span th:text="${timestamp}">time</span>)</h3>
+        <p><strong>Transcription:</strong> <span th:text="${transcript}"></span></p>
+        <p><strong>Coach's Advice:</strong> <span th:text="${responseText}"></span></p>
+        <p><strong>Audio Response:</strong></p>
+        <h3>Coach's Response:</h3>
+        <audio controls autoplay src="${responseAudioFile}"></audio>
+    </div>
+</div>
+</body>
+
+</html>
